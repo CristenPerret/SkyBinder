@@ -1,8 +1,10 @@
 # MyweaverControls
 Currently its just an AHK that can openendly be given hotkeys to functions.
+
 Its hotkeys only applies to the Skyweaver.exe window.
 
 The default bind to open the GUI to bind the actions is F8
+
 Hotkeys are stored in an .ini file in the folder this .ahk file resides.
 
 
