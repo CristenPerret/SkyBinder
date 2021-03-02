@@ -10,7 +10,7 @@ Hotkeys are stored in an `.ini` file in the folder this `.ahk` file resides.
 #### Functions
 ```
 Opens Menu
-End Turn
+Ends Turn
 Auto-Forefit
 ```
 
