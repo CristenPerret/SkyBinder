@@ -3,33 +3,60 @@
 SetBatchLines, -1
 SetDefaultMouseSpeed, 0 ; Move mouse instantly
 
-; Changes the tray icon's tooltip (displayed when mouse hovers over it)
-Menu, tray, Tip, Skyweaver Hotkeys
-; Show Tooltip in the tray that the script is active
-TrayTip, SkyWeaver Controller [MOD] wip,,16
 
-#ctrls = 6  ;How many Hotkey controls to add?
+
+
+
+
+#actions = 6  ;Adjust this value to increase the amount of bindable hotkeys
+
+;Change this array to display text next to the associated Hotkey.
+ActionTitle :=["1. Open Gui"
+, "2. Game Menu"
+, "3. Basic Click"
+, "4. End Turn"
+, "5. Hand region"
+, "6. Auto - Forefit" ] 
+
+
+
+
+; Associating the functions to the labels are listed at the bottom of the script as 'Action#:'
+
+
+;--------------------------------------------------------------------------------------------------
+; THIS SECTION ISNT USER-FRIENDLY. BEWARNED IF YOU'RE NOT VERSED IN AHK'S SYNTAX.
+;--------------------------------------------------------------------------------------------------
+
+; Tray options ----
+TrayTip, SkyWeaver Controller [MOD] wip,,16
+Menu, tray, Tip, Skyweaver Hotkeys
 Menu, Tray, Click, 1
 Menu, Tray, NoStandard
 Menu, Tray, Add, Keybinds, Action6
 Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add, Exit, GuiClose
 Menu, Tray, Default, Keybinds
+
+
+
+; GUI -----
+
 Gui, Add, Radio, x-15 y-15
-Gui, Add, Text,  x50 -Background +0x1, Check out the bottom of the script `nfor a description of each binding.
+Gui, Add, Text,  x50 -Background +0x1, Made by Dump! With help from`n/u/jaco0646's Dynamic hotkeys.
 Gui -0x10000 -0x30000
-Loop,% #ctrls {
- 
- Gui, Add, Text, xm, Action : %A_Index%:
+Loop,% #actions {
+Gui, Add, Text, xm,  % ActionTitle[A_Index] 
  IniRead, savedHK%A_Index%, Hotkeys.ini, Hotkeys, %A_Index%, %A_Space%
  If savedHK%A_Index%                                       ;Check for saved hotkeys in INI file.
   Hotkey,% savedHK%A_Index%, Action%A_Index%                 ;Activate saved hotkeys if found.
  StringReplace, noMods, savedHK%A_Index%, ~                  ;Remove tilde (~) and Win (#) modifiers...
  StringReplace, noMods, noMods, #,,UseErrorLevel              ;They are incompatible with hotkey controls (cannot be shown).
  Gui, Add, Hotkey, x+5 vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
- Gui, Add, CheckBox, x+5 vCB%A_Index% Checked%ErrorLevel%, Win  ;Add checkboxes to allow the Windows key (#) as a modifier...
+
+ ;Gui, Add, CheckBox, x+5 vCB%A_Index% Checked%ErrorLevel%, Win  ;Add checkboxes to allow the Windows key (#) as a modifier...
 }                                                                ;Check the box if Win modifier is used.
-Gui Add, Button, +Default, &OK
+Gui Add, Button, xm  +Default,&OK
 Gui Add, Button,xm ym , &INFO
 return
 GuiClose:
@@ -65,8 +92,8 @@ validateHK(GuiControl) {
 }
 
 checkDuplicateHK(num) {
- global #ctrls
- Loop,% #ctrls
+ global #actions
+ Loop,% #actions
   If (HK%num% = savedHK%A_Index%) {
    dup := A_Index
    Loop,6 {
@@ -85,7 +112,7 @@ setHK(num,INI,GUI) {
   Hotkey, %GUI%, Action%num%, On   ;  enable it.
  IniWrite,% GUI ? GUI:null, Hotkeys.ini, Hotkeys, %num%
  savedHK%num%  := HK%num%
- TrayTip, Action%num%,% !INI ? GUI " ON":!GUI ? INI " OFF":GUI " ON`n" INI " OFF"
+ TrayTip, Action%num%,% !INI ? GUI " ON":!GUI ? INI " OFF":GUI " ON`n" INI " OFF" ; Display changing binds in notification, 
 }
 
 #MenuMaskKey vk07                 ;Requires AHK_L 38+
@@ -123,18 +150,22 @@ HotkeyCtrlHasFocus() {
  }
 }
 
+ButtonOk:
+Gui, Hide ;minimizes to tray
+return
+
 ButtonInfo:
 Gui, 2:New, -0x10000 -0x30000
-Gui, 2:Add, Text,Center ,My UI Scale in SkyWeaver `nwas calibrated to 0.69
-Gui, 2:Add, Text, ,.::ACTION::.`n1 : End Turn `n2 : Basic Click`n3 : Move Mouse to Hand `n4 : Open Game Menu `n5 : Auto - Forefit `n6 : Open GUI (F8) `n
-Gui, 2:Add, Text,w140 h2 +0x10
-Gui, 2:Add, Text,Center , Made by : Dumpsterman ';..;'
+Gui, 2:Add, Text, Center ,This script is very open-ended it can`nadd/remove and make whatever actions you wish`nby navigating through to this AHK file.`nTo adjust the amount of hotkeys change 'Actions = #',`nand ActionTitle to fit what changes you've made to this script.
+Gui, 2:Add, Text,w295 h2 +0x10
+Gui, 2:Add, Text,Center ,My UI Scale in game was 0.69 when aligning certain actions.
+
 Gui, 2:Show, , More Info
 return
 
 
 
-;; FUNCTIONS
+; FUNCTIONS ------------------------------------------------------
 
 ; Convert relative positions of buttons on screen into absolute 
 ; pixels for AHK commands. Allows for different resolutions.
@@ -161,30 +192,29 @@ ToolTip
 return
 }
 
-; Open (and wait for) the game menu
 OpenMenu() {
 	MenuButton := GAP(0.99, 0.02)
-	MouseCenter := GAP(0.50, 0.50)
-	MouseMove, MenuButton[1], MenuButton[2]
+	MouseCenter := GAP(0.50, y)
+	MouseMove, MenuButton[1], MenuButton[2] ; goes to the cog in-game
 	Click,
 	Sleep, 200 ; Wait until it has popped up
-	MouseMove, MouseCenter[1], MouseCenter[2]
+	MouseMove, MouseCenter[1], MouseCenter[1] ; goes to the menu ui
 	
 }
 
-; Presses the "END TURN" button on the right side, if possible
 PassTurn() {
 	BlockInput, On
-	EndTurn := GAP(0.97, 0.98)
-	MouseGetPos, gx, gy
-	MouseMove, left EndTurn[1], EndTurn[2]
-	Click,
+	EndTurn := GAP(0.97, 0.98) ;Bottom right
+	MouseGetPos, gx, gy ; remembers mouse position
+	MouseMove, left EndTurn[1], EndTurn[2] ; goes to end turn
+	Click, ; ends turn
 	Sleep, 20
-	MouseMove, gx, gy
-	BlockInput, Off
+	MouseMove, gx, gy ;returns cursor
+	BlockInput, Off 
 	return
 }
 
+;Where the continue button is in-game 
 HandCont() {
 BlockInput, on
 ContBtn := GAP(0.50, 0.96)
@@ -192,15 +222,13 @@ MouseMove, ContBtn[1], ContBtn[2]
 BlockInput, on
 }
 
-
-
-; Bring up the menu and click the "Concede" button
+; May have to increase intervals of sleep based on loading times
 GG() {
 	BlockInput, On
-	OpenMenu()
-	LeaveQ := GAP(0.50, 0.44)
-	GGButton := GAP(0.47, 0.53)
-	RKieu := GAP(0.80, 0.41)
+	OpenMenu() 
+	LeaveQ := GAP(0.50, 0.44) ; Button on the settings UI
+	GGButton := GAP(0.47, 0.53) ; Confirm leaving the match
+	RKieu := GAP(0.80, 0.41) ; Button to requeue
 	MouseClick, left, LeaveQ[1], LeaveQ[2]
 	sleep, 240
 	MouseClick, left, GGButton[1], GGButton[2]
@@ -228,46 +256,46 @@ GG() {
 	BlockInput, Off
 }
 
+; End of Functions ------------------------------------------------
 
 
+; Welcome friends!
+; This is very openended so have fun customizing your own version of this script however you seem fit!
 
 
-
-
+; Only allows this window to be trigger the actions below.
 #IfWinActive, ahk_exe SkyWeaver.exe
 
-
-
-
-ButtonOk:
-Gui, Hide ;minimizes to tray
-return
-
-
-
+; Custom Functions available ATM : 
+; Grabscreenregion() - When bound to a hotkey it will save your cursor position when pressed to your clipboard. In the syntax this code likes.
+; GG() - Will Concede and interact with the nessisary things to requeue.
+; OpenMenu() - Clicks on the button for the in-game settings.
+; PassTurn() - Ends your turn and returns the mouse back where it was .
+; HandCont() - Moves mouse to the Continue button or in the center where your hand resides.
 
 ;These Actions may contain any commands for their respective hotkeys to perform.
 Action1:
- PassTurn()
+ F8::
+ Gui, Show, ,[SW] Hotkeys
 return
 
 Action2:
- Click,
-return
-
-Action3:
- HandCont() ; Space where the Continue button is, but also the central spot of the Hand.
-return
-
-Action4:
  OpenMenu()
 return
 
+Action3:
+ Click,
+return
+
+Action4:
+ PassTurn()
+
+return
+
 Action5:
- GG()
+ HandCont() ; Space where the Continue button is, but also the central spot of the Hand.
 return
 
 Action6:
-F8::
- Gui, Show, ,[SW] Hotkeys
+ GG()
 return
