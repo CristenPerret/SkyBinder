@@ -286,8 +286,7 @@ Gui, Show, w%guiWidth% ,SkyBinder
 return
 
 Action2:
-reload
-;OpenMenu()
+OpenMenu()
 return
 
 Action3:
