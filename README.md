@@ -25,13 +25,9 @@ Working on a way to bind the Emotes, ripme. 	:lying_face:
 ___
 ### Customizing the script
 
-__To adjust the quantity of hotkeys__ change `#actions = 6 ` Found at the very top.
-
-__To change the text that appears next to each hotkey__ edit `ActionTitle :=[]` Found just below `#actions = #`. 
-
-__Assigning actions to the hotkeys__ are found at the very end of the script. Starting at `Action1:`
-
-
+* To adjust the quantity of hotkeys change `#actions = 6` Found at the very top.
+* To change the text that appears next to each hotkey edit `ActionTitle :=[]` Found just below `#actions = #`. 
+* Assigning actions to the hotkeys are found at the very end of the script. Starting at `Action1:`
 ___
 #### If theres any problems with the alignment of the binds
 add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the Script.
