@@ -1,6 +1,8 @@
 # MyWeaverControls
 Currently its just an `AHK` that can openendly be given bind keys to perform actions.
 
+__Requires: __ [AutoHotKey](https://www.autohotkey.com/download/)
+
 It will only apply to anything named 'Skyweaver.exe' but can easily work in-browser.
 
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
