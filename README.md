@@ -24,13 +24,12 @@ HandCont() - Moves mouse to the Continue button or in the center where your hand
 2. Smorc
 
 
-___
-### Customizing the script
 
+### Customizing the script
 * To adjust the quantity of hotkeys change `#actions = 6` Found at the very top.
 * To change the text that appears next to each hotkey edit `ActionTitle :=[]` Found just below `#actions = #`. 
 * Assigning actions to the hotkeys are found at the very end of the script. Starting at `Action1:`
-___
+__
 #### If theres any problems with the alignment of the binds
 add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the Script.
 
