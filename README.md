@@ -32,8 +32,8 @@ ___
 
 
 
-__If theres any problems with the alignment of the binds__
-
+#### If theres any problems with the alignment of the binds
+___
 add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the Script.
 
 Once the bind for this function is used, it will save in the proper syntax for this code in your clipboard the data from where your cursor was relative to the Skyweaver Window. `:= GAP(x.xx, y.yy)`
