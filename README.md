@@ -1,7 +1,7 @@
 # MyweaverControls
-Currently its just an `AHK` that can openendly be given hotkeys to functions.
+Currently its just an `AHK` that can openendly be given bind keys to perform actions.
 
-Its hotkeys only applies to the Skyweaver.exe window.
+It will only apply to anything named 'Skyweaver.exe' but can easily work in-browser.
 
 The default bind to open the GUI to bind the actions is "F8"
 
