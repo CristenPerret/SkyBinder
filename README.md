@@ -1,4 +1,4 @@
-# My(Sky)WeaverControls
+# MyWeaverControls
 Currently its just an `AHK` that can openendly be given bind keys to perform actions.
 
 It will only apply to anything named 'Skyweaver.exe' but can easily work in-browser.
