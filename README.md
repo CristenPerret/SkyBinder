@@ -19,13 +19,6 @@ OpenMenu() - Clicks on the button for the in-game settings.
 PassTurn() - Ends your turn and returns the mouse back where it was .
 HandCont() - Moves mouse to the Continue button or in the center where your hand resides.
 ```
-# Next to be added
-- [x] Auto-forefit & requeue
-- [ ] Emotes 	:lying_face:
-- [ ] Smorc
-
-
-___
 ### Customizing the script
 * To adjust the quantity of hotkeys change `#actions = 6` Found at the very top.
 * To change the text that appears next to each hotkey edit `ActionTitle :=[]` Found just below `#actions = #`. 
@@ -36,3 +29,8 @@ add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the 
 
 Once the bind for this function is used, it will save in the proper syntax for this code in your clipboard the data from where your cursor was relative to the Skyweaver Window. `:= GAP(x.xx, y.yy)`
 
+
+# Next to be added
+- [x] Auto-forefit & requeue
+- [ ] Emotes 	:lying_face:
+- [ ] Smorc
