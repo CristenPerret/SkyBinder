@@ -9,9 +9,11 @@ Hotkeys are stored in an `.ini` file in the folder this `.ahk` file resides.
 
 #### Functions
 ```
-Opens Menu
-Ends Turn
-Auto-Forefit
+Grabscreenregion() - When bound to a hotkey it will save your cursor position when pressed to your clipboard. In the syntax this code likes.
+GG() - Will Concede and interact with the nessisary things to requeue.
+OpenMenu() - Clicks on the button for the in-game settings.
+PassTurn() - Ends your turn and returns the mouse back where it was .
+HandCont() - Moves mouse to the Continue button or in the center where your hand resides.
 ```
 
 
