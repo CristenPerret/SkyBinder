@@ -7,7 +7,7 @@ The default bind to open the GUI to bind the actions is "F8"
 
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
-
+___
 ###### Your options are the functions listed below, or feel free to have it do anything you want it to do as your copy is your copy.
 
 
@@ -23,17 +23,17 @@ HandCont() - Moves mouse to the Continue button or in the center where your hand
 Working on a way to bind the Emotes, ripme. 	:lying_face:
 
 ___
+### Customizing the script
 
-###### To adjust the quantity of hotkeys change `#actions = 6 ` Found at the very top.
+__To adjust the quantity of hotkeys__ change `#actions = 6 ` Found at the very top.
 
-###### To change the text that appears next to each hotkey edit `ActionTitle :=[]` Found just below `#actions = #`. 
+__To change the text that appears next to each hotkey__ edit `ActionTitle :=[]` Found just below `#actions = #`. 
 
-###### Assigning actions to the hotkeys are found at the very end of the script. Starting at `Action1:`
+__Assigning actions to the hotkeys__ are found at the very end of the script. Starting at `Action1:`
 
 
-
-#### If theres any problems with the alignment of the binds
 ___
+#### If theres any problems with the alignment of the binds
 add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the Script.
 
 Once the bind for this function is used, it will save in the proper syntax for this code in your clipboard the data from where your cursor was relative to the Skyweaver Window. `:= GAP(x.xx, y.yy)`
