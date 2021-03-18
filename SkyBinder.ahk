@@ -2,7 +2,6 @@
 #NoEnv
 SetBatchLines, -1
 SetDefaultMouseSpeed, 0 ; Move mouse instantly
-#Include %A_ScriptDir%\Assets\ControlColor.ahk
 
 
 
