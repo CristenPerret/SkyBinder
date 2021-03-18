@@ -19,7 +19,10 @@ OpenMenu() - Clicks on the button for the in-game settings.
 PassTurn() - Ends your turn and returns the mouse back where it was .
 HandCont() - Moves mouse to the Continue button or in the center where your hand resides.
 ```
-Working on a way to bind the Emotes, ripme. 	:lying_face:
+#Next to be added
+1. Emotes 	:lying_face:
+2. Smorc
+
 
 ___
 ### Customizing the script
