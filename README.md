@@ -3,7 +3,7 @@ Currently its just an `AHK` that can openendly be given bind keys to perform act
 
 __Requires:__  [AutoHotKey](https://www.autohotkey.com/download/)
 
-It will only apply to anything named 'Skyweaver.exe' but can easily work in-browser.
+It will only apply to anything named 'Skyweaver.exe' but can be easily changed to work in-browser aswell.
 
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
