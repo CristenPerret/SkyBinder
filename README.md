@@ -1,4 +1,4 @@
-# MyWeaverControls
+# SkyBinder (MyWeaverControls)
 Currently its just an `AHK` that can openendly be given bind keys to perform actions.
 
 __Requires:__  [AutoHotKey](https://www.autohotkey.com/download/)
