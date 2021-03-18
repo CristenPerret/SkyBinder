@@ -2,7 +2,7 @@
 #NoEnv
 SetBatchLines, -1
 SetDefaultMouseSpeed, 0 ; Move mouse instantly
-#Include %A_ScriptDir%\ControlColor.ahk
+#Include %A_ScriptDir%\Assets\ControlColor.ahk
 
 
 
@@ -30,7 +30,7 @@ ActionTitle :=["1. Open Gui"
 
 ; Tray options ----
 TrayTip, SkyBinder,,16
-Menu, Tray, Icon, Skybinder.ico, 1,1
+Menu, Tray, Icon, Assets\Skybinder.ico, 1,1
 Menu, tray, Tip, SkyBinder
 Menu, Tray, Click, 1
 Menu, Tray, NoStandard
@@ -42,13 +42,11 @@ Menu, Tray, Default, Keybinds
 
 
 ; GUI -----
-
 guiWidth := 206
-
 Gui +hWndhMainWnd
 Gui Color, 0x2F204C
 Gui, Add, Radio, x-15 y-15 ;Important to not automatically bind keys on opening gui
-Gui Add, Picture, gButtonInfo xm yp ym w186 h92, Titlebar.png
+Gui Add, Picture, gButtonInfo xm yp ym w186 h92, Assets\Titlebar.png
 Gui -0x10000 -0x30000
 Loop,% #actions {
 Gui Font, Bold Underline c0xCCCAD3, Georgia
@@ -60,10 +58,10 @@ Gui Font
  StringReplace, noMods, savedHK%A_Index%, ~                  ;Remove tilde (~) and Win (#) modifiers...
  StringReplace, noMods, noMods, #,,UseErrorLevel              ;They are incompatible with hotkey controls (cannot be shown).
  Gui, Add, Hotkey, x+5 vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
- 
+
 }                  
-Gui +hWndhMainWnd                                              
-Gui Add, Picture, gminimize xm wp w181 h28 ,Hide.png
+Gui +hWndhMainWnd
+Gui Add, Picture, gminimize xm wp w181 h28 ,Assets\Hide.png
 return
 GuiClose:
  ExitApp
@@ -161,10 +159,14 @@ Gui, Hide ;minimizes to tray
 return
 
 ButtonInfo:
+
 Gui, 2:New, -0x10000 -0x30000
-Gui, 2:Add, Text, Center ,This script is very open-ended it can`nadd/remove and make whatever actions you wish`nby navigating through to this AHK file.`nTo adjust the amount of hotkeys change 'Actions = #',`nand ActionTitle to fit what changes you've made to this script.
-Gui, 2:Add, Text,w295 h2 +0x10
-Gui, 2:Add, Text,Center ,My UI Scale in game was 0.69 when aligning certain actions.
+Gui, 2:+hWndhMainWnd
+Gui, 2:Color, 0x2F204C
+Gui, 2:Font, Bold c0xCCCAD3, Georgia
+Gui, 2:Add, Text, x0 xm Center ,This script is very open-ended it can`nadd/remove to make whatever actions you wish.`n`nTo adjust the amount of hotkeys change 'Actions = #'.`nActionTitle to describe what each Action does.
+Gui, 2:Add, Text,w350 h2 +0x10
+Gui, 2:Add, Text, x0 xm Center +0x10,My UI Scale in game was 0.69 while developing. Nice..
 
 Gui, 2:Show, , More Info
 return
@@ -286,7 +288,8 @@ Gui, Show, w%guiWidth% ,SkyBinder
 return
 
 Action2:
-OpenMenu()
+reload
+;OpenMenu()
 return
 
 Action3:
