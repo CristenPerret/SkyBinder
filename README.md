@@ -3,7 +3,7 @@ Currently its just an `AHK` that can openendly be given bind keys to perform act
 
 It will only apply to anything named 'Skyweaver.exe' but can easily work in-browser.
 
-The default bind to open the GUI to bind the actions is "F8"
+The default bind to open the GUI to bind the actions is **"F8"**
 
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
