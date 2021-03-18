@@ -20,16 +20,17 @@ PassTurn() - Ends your turn and returns the mouse back where it was .
 HandCont() - Moves mouse to the Continue button or in the center where your hand resides.
 ```
 # Next to be added
-1. Emotes 	:lying_face:
-2. Smorc
+- [x] Auto-forefit & requeue
+- [ ] Emotes 	:lying_face:
+- [ ] Smorc
 
 
-
+___
 ### Customizing the script
 * To adjust the quantity of hotkeys change `#actions = 6` Found at the very top.
 * To change the text that appears next to each hotkey edit `ActionTitle :=[]` Found just below `#actions = #`. 
 * Assigning actions to the hotkeys are found at the very end of the script. Starting at `Action1:`
-__
+____
 #### If theres any problems with the alignment of the binds
 add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the Script.
 
