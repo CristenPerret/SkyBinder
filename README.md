@@ -8,7 +8,7 @@ The default bind to open the GUI to bind the actions is "F8"
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
 
-#### Your options are the functions listed below, or feel free to have it do anything you want it to do as your copy is your copy.
+###### Your options are the functions listed below, or feel free to have it do anything you want it to do as your copy is your copy.
 
 
 
@@ -22,13 +22,13 @@ HandCont() - Moves mouse to the Continue button or in the center where your hand
 ```
 Working on a way to bind the Emotes, ripme. 	:lying_face:
 
+___
 
+###### To adjust the quantity of hotkeys change `#actions = 6 ` Found at the very top.
 
-#### To adjust the quantity of hotkeys change `#actions = 6 ` Found at the very top.
+###### To change the text that appears next to each hotkey edit `ActionTitle :=[]` Found just below `#actions = #`. 
 
-#### To change the text that appears next to each hotkey edit `ActionTitle :=[]` Found just below `#actions = #`. 
-
-#### Assigning actions to the hotkeys are found at the very end of the script. Starting at `Action1:`
+###### Assigning actions to the hotkeys are found at the very end of the script. Starting at `Action1:`
 
 
 
