@@ -9,7 +9,7 @@ Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
 Once running you can either press **"F8"**, or select the 'Keybinds' option in your Tray to setup your binds.
 ___
-![Screenshot](Screenshot.png)
+![Screenshot](Assets/Screenshot.png)
 ###### Your options are the functions listed below, or feel free to have it do anything you want it to do as your copy is your copy.
 
 
