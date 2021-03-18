@@ -32,6 +32,13 @@ add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the 
 Once the bind for this function is used, it will save in the proper syntax for this code in your clipboard the data from where your cursor was relative to the Skyweaver Window. `:= GAP(x.xx, y.yy)`
 
 
+### Known issues :
+Can bind Mousebutton4 (XButton1), Mousewheel press (MButton), and other special keys. 
+
+Just not through the GUI. Only by Editing the `.ini` file.
+
+
+
 # Next to be added
 - [x] Auto-forefit & requeue
 - [ ] Emotes 	:lying_face:
