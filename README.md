@@ -3,10 +3,9 @@ Currently its just an `AHK` that can openendly be given bind keys to perform act
 
 It will only apply to anything named 'Skyweaver.exe' but can easily work in-browser.
 
-Once running you can either press **"F8"**, or select the 'Keybinds' option in your Tray to setup your binds.
-
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
+Once running you can either press **"F8"**, or select the 'Keybinds' option in your Tray to setup your binds.
 ___
 ###### Your options are the functions listed below, or feel free to have it do anything you want it to do as your copy is your copy.
 
