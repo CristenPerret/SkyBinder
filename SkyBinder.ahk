@@ -5,20 +5,23 @@ SetDefaultMouseSpeed, 0 ; Move mouse instantly
 
 
 
-
-
-#actions = 6  ;Adjust this value to increase the amount of bindable hotkeys
-
+#actions = 15  ;Adjust this value to increase the amount of bindable hotkeys
 ;Change this array to display text next to the associated Hotkey.
-ActionTitle :=["1. Open Gui"
-, "2. Game Menu"
-, "3. Basic Click"
-, "4. End Turn"
-, "5. Hand region"
-, "6. Auto - Forefit" ] 
-
-
-
+ActionTitle :=["1.End Turn"
+,"2. P-DECK"
+,"3. P-GRAVE"
+,"4. P-BOARD"
+,"5. P-HAND"
+,"6. ENE-GRAVE"
+,"7. ENE-BOARD"
+,"8. ENE-HAND"
+,"9. HISTORY"
+,"10. MUTE"
+,"11. OPTIONS"
+,"12. GG"
+,"13. ShowGUI(F8)"
+,"14. Reload Script"
+,"15. Cursor pos (DEV)"]
 
 ; Associating the functions to the labels are listed at the bottom of the script as 'Action#:'
 
@@ -33,13 +36,10 @@ Menu, Tray, Icon, Assets\Skybinder.ico, 1,1
 Menu, tray, Tip, SkyBinder
 Menu, Tray, Click, 1
 Menu, Tray, NoStandard
-Menu, Tray, Add, Keybinds, Action6
+Menu, Tray, Add, Keybinds, Action13
 Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add, Exit, GuiClose
 Menu, Tray, Default, Keybinds
-
-
-
 ; GUI -----
 guiWidth := 206
 Gui +hWndhMainWnd
@@ -57,7 +57,6 @@ Gui Font
  StringReplace, noMods, savedHK%A_Index%, ~                  ;Remove tilde (~) and Win (#) modifiers...
  StringReplace, noMods, noMods, #,,UseErrorLevel              ;They are incompatible with hotkey controls (cannot be shown).
  Gui, Add, Hotkey, x+5 vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
-
 }                  
 Gui +hWndhMainWnd
 Gui Add, Picture, gminimize xm wp w181 h28 ,Assets\Hide.png
@@ -66,7 +65,6 @@ GuiClose:
  ExitApp
 Reload:
  reload
-
 GuiAction:
  If %A_GuiControl% in +,^,!,+^,+!,^!,+^!    ;If the hotkey contains only modifiers, return to wait for a key.
   return
@@ -75,7 +73,6 @@ GuiAction:
  Else
   validateHK(A_GuiControl)
 return
-
 validateHK(GuiControl) {
  global lastHK
  Gui, Submit, NoHide
@@ -93,7 +90,6 @@ validateHK(GuiControl) {
  If (savedHK%num% || HK%num%)               ;Unless both are empty,
   setHK(num, savedHK%num%, HK%num%)         ;  update INI/GUI
 }
-
 checkDuplicateHK(num) {
  global #actions
  Loop,% #actions
@@ -107,7 +103,6 @@ checkDuplicateHK(num) {
    break
   }
 }
-
 setHK(num,INI,GUI) {
  If INI                           ;If previous hotkey exists,
   Hotkey, %INI%, Action%num%, Off  ;  disable it.
@@ -117,7 +112,6 @@ setHK(num,INI,GUI) {
  savedHK%num%  := HK%num%
  TrayTip, Action%num%,% !INI ? GUI " ON":!GUI ? INI " OFF":GUI " ON`n" INI " OFF" ; Display changing binds in notification, 
 }
-
 #MenuMaskKey vk07                 ;Requires AHK_L 38+
 #If ctrl := HotkeyCtrlHasFocus()
  *AppsKey::                       ;Add support for these special keys,
@@ -144,7 +138,6 @@ setHK(num,INI,GUI) {
   validateHK(ctrl)
  return
 #If
-
 HotkeyCtrlHasFocus() {
  GuiControlGet, ctrl, Focus       ;ClassNN
  If InStr(ctrl,"hotkey") {
@@ -152,44 +145,51 @@ HotkeyCtrlHasFocus() {
   Return, ctrl
  }
 }
-
 minimize:
-Gui, Hide ;minimizes to tray
+	Gui, Hide ;minimizes to tray
 return
-
 ButtonInfo:
-
 Gui, 2:New, -0x10000 -0x30000
 Gui, 2:+hWndhMainWnd
 Gui, 2:Color, 0x2F204C
 Gui, 2:Font, Bold c0xCCCAD3, Georgia
-Gui, 2:Add, Text, x0 xm Center ,This script is very open-ended it can`nadd/remove to make whatever actions you wish.`n`nTo adjust the amount of hotkeys change 'Actions = #'.`nActionTitle to describe what each Action does.
-Gui, 2:Add, Text,w350 h2 +0x10
-Gui, 2:Add, Text, x0 xm Center +0x10,My UI Scale in game was 0.69 while developing. Nice..
-
+Gui, 2:Add, Text, x+20 xm ym Center ,If what you seek is Skyweaver HotKeys.`nThis is the answer.`n`nSkyBinder can easily be modified by you. `nBind the 'Cursor pos' action. `nThen paste into the *AHK File where needed.
+Gui, 2:Add, Text,w330 h2 +0x10
+Gui, 2:Add, Text, x0 xm Center +0x10,Made with UI Scale was 0.69 Fullscreen 1920x1080.
 Gui, 2:Show, , More Info
 return
-
-
-
 ; FUNCTIONS ------------------------------------------------------
-
-; Convert relative positions of buttons on screen into absolute 
-; pixels for AHK commands. Allows for different resolutions.
-GAP(RatioX, RatioY) {
+GAP(RatioX, RatioY) { ; [G]et [A]bsolute [P]ixels
 	WinGetPos,,, Width, Height
 	AbsoluteX := Round(Width * RatioX)
 	AbsoluteY := Round(Height * RatioY)
 	return [AbsoluteX, AbsoluteY]
 }
-
+RNGsleep(Between1, Between2) {
+	Random, RandomizedSleepTime, Between1, Between2
+	Sleep, RandomizedSleepTime
+}
+doAction(AX, AY, cliQue=false,return2ogpos=false ) {
+	BlockInput, on
+	MoveAction := GAP(AX, AY)
+	MouseGetPos, gx, gy
+	MouseMove, MoveAction[1], MoveAction[2]
+	if (cliQue) {
+	click,
+	}
+	if (return2ogpos) {
+	MouseMove, gx, gy
+	}	
+	BlockInput, off
+	return
+}
 Grabscreenregion() {
 BlockInput On
 MouseGetPos, gx, gy
 WinGetPos,,, maxx, maxy
 CalcRatiox := round((gx / maxx) , 2)
 CalcRatioy :=  round((gy / maxy) , 2)
-clipboard := " := GAP(" CalcRatiox ", " CalcRatioy ")"
+clipboard := "doAction(" CalcRatiox ", " CalcRatioy ")"
 Tooltip, "pos (%CalcRatiox%`,%CalcRatioy%) saved.", gx-50, gy-25
 SetTimer, RemoveToolTip, -5000
 BlockInput Off 
@@ -199,110 +199,118 @@ ToolTip
 return
 }
 
-OpenMenu() {
-	MenuButton := GAP(0.99, 0.02)
-	MouseCenter := GAP(0.50, y)
-	MouseMove, MenuButton[1], MenuButton[2] ; goes to the cog in-game
-	Click,
-	Sleep, 200 ; Wait until it has popped up
-	MouseMove, MouseCenter[1], MouseCenter[1] ; goes to the menu ui
-	
-}
-
-PassTurn() {
-	BlockInput, On
-	EndTurn := GAP(0.97, 0.98) ;Bottom right
-	MouseGetPos, gx, gy ; remembers mouse position
-	MouseMove, left EndTurn[1], EndTurn[2] ; goes to end turn
-	Click, ; ends turn
-	Sleep, 20
-	MouseMove, gx, gy ;returns cursor
-	BlockInput, Off 
-	return
-}
-
-;Where the continue button is in-game 
-HandCont() {
-BlockInput, on
-ContBtn := GAP(0.50, 0.96)
-MouseMove, ContBtn[1], ContBtn[2]
-BlockInput, on
-}
-
-; May have to increase intervals of sleep based on loading times
-GG() {
-	BlockInput, On
-	OpenMenu() 
-	LeaveQ := GAP(0.50, 0.44) ; Button on the settings UI
-	GGButton := GAP(0.47, 0.53) ; Confirm leaving the match
-	RKieu := GAP(0.80, 0.41) ; Button to requeue
-	MouseClick, left, LeaveQ[1], LeaveQ[2]
-	sleep, 240
-	MouseClick, left, GGButton[1], GGButton[2]
-	sleep, 240
-	HandCont()
-	Click,
-	sleep, 240
-	Click,
-	sleep, 420
-	click,
-	sleep, 1420
-	click,
-	sleep, 1420
-	click,
-	sleep, 1420
-	click,
-	sleep, 1420
-	click,
-	sleep, 1420
-	click,
-	sleep, 4420
-	MouseMove, RKieu[1], RKieu[2]
-	sleep, 240
-	click,
-	BlockInput, Off
-}
-
 ; End of Functions ------------------------------------------------
 
 
-; Welcome friends!
+
+
+
+; Welcome friends! ^^
 ; This is very openended so have fun customizing your own version of this script however you seem fit!
-
-
-; Only allows this window to be trigger the actions below.
-#IfWinActive, ahk_exe SkyWeaver.exe
 
 ; Custom Functions available ATM : 
 ; Grabscreenregion() - When bound to a hotkey it will save your cursor position when pressed to your clipboard. In the syntax this code likes.
-; GG() - Will Concede and interact with the nessisary things to requeue.
-; OpenMenu() - Clicks on the button for the in-game settings.
-; PassTurn() - Ends your turn and returns the mouse back where it was .
-; HandCont() - Moves mouse to the Continue button or in the center where your hand resides.
+; GAP(RatioX, RatioY) - For more dynamically found pixels, uses the selected's window maxW/H. GetAbsolutePixels
+; RNGsleep(MinMS, MaxMS) - Whats not more fun than a little sleepytime RNG?
+; doAction(xRatio, yRatio, Click, ReturnToOrigialPosition) - Where (,,true,true) Moves to 0.x,0.y, clicks, then returns cursor to OG position.
+
+; My Resolution UI for this was scaled at 0.69, and primarily at 1920x1080 Fullscreen.
+
+; FullScreen
+;	doAction(0.97, 0.98) ; END TURN
+;	doAction(0.89, 0.47) ; PLAYER DECK
+;	doAction(0.11, 0.49) ; PLAYER GRAVE
+;	doAction(0.50, 0.59) ; PLAYER BOARD
+;	doAction(0.50, 0.97) ; PLAYER HAND
+;	doAction(0.11, 0.40) ; ENEMY GRAVE
+;	doAction(0.50, 0.30) ; ENEMY BOARD
+;	doAction(0.50,0.02) ; ENEMY HAND
+;	doAction(0.93, 0.02) ; HISTORY
+;	doAction(0.96, 0.02) ; MUTE
+;	doAction(0.99, 0.02) ; OPTIONS
+;	doAction(0.5, 0.44) ; Concede
+;	doAction(0.47, 0.53) ; Confirm Concede
+;	doAction(0.8, 0.41) ;Requeue / Play
+
+
+; Windowed Mode (Dang Topbar)
+;	doAction(0.11, 0.44) ; Enemy Grave (Window)
+;	doAction(0.50, 0.33) ; Enemy Board (Window)
+;	doAction(0.11, 0.49) ; PLAYER GRAVE
+;	doAction(0.80, 0.15) ; HISTORY
+;	doAction(0.87, 0.15) ; MUTE
+;	doAction(0.95, 0.15) ; OPTIONS
 
 ;These Actions may contain any commands for their respective hotkeys to perform.
+
+; Only allows this window to be trigger the actions below.
+#IfWinActive, ahk_exe SkyWeaver.exe
+	
 Action1:
+	doAction(0.98, 0.98,true, true) ; END TURN
+return
+Action2:
+	doAction(0.89, 0.47) ; PLAYER DECK
+return
+Action3:
+	doAction(0.12, 0.53) ; PLAYER GRAVE
+return
+Action4:
+	doAction(0.50, 0.59) ; PLAYER BOARD
+return
+Action5:
+	doAction(0.50, 0.97) ; PLAYER HAND
+return
+Action6:
+	doAction(0.16, 0.39, true) ; ENEMY GRAVE
+return
+Action7:
+	doAction(0.50, 0.30) ; ENEMY BOARD
+return
+Action8:
+	doAction(0.50,0.02) ; ENEMY HAND
+return
+Action9:
+	doAction(0.93, 0.02,true,true) ; HISTORY
+return
+Action10:
+	doAction(0.96,0.02,true,true) ;MUTE
+return
+Action11:
+	doAction(0.99, 0.02,true) ; OPTIONS
+	doAction(0.5, 0.48)
+return
+Action12: ;Concedes and presses the stuff to requeue again.
+	doAction(0.99, 0.02, true) ; OPTIONS
+	RNGsleep(300,420) ;Allow UI to load
+	doAction(0.5, 0.44, true) ; Concede
+	doAction(0.47, 0.53, true) ; Confirm Concede
+	RNGsleep(300,420) ;Allow UI to load
+	doAction(0.50, 0.97,true) ; Continue Button
+	RNGsleep(240,420)
+	Click,
+	RNGsleep(420,840)
+	click,
+	RNGsleep(1000,1420)
+	click,
+	RNGsleep(1000,1420)
+	click,
+	RNGsleep(1000,1420)
+	click,
+	RNGsleep(1000,1420)
+	click,
+	RNGsleep(1000,1420)
+	click,
+	RNGsleep(4000,4420)
+	doAction(0.8, 0.41,true) ;Requeue
+return
+Action13:
 F8::
 Gui, Show, w%guiWidth% ,SkyBinder
 return
-
-Action2:
-OpenMenu()
+Action14:
+reload
 return
-
-Action3:
-Click,
-return
-
-Action4:
-PassTurn()
-
-return
-
-Action5:
-HandCont() ; Space where the Continue button is, but also the central spot of the Hand.
-return
-
-Action6:
-GG()
+Action15:
+Grabscreenregion()
 return
