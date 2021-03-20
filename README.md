@@ -16,10 +16,9 @@ ___
 ### Functions
 ```
 Grabscreenregion() - When bound to a hotkey it will save your cursor position when pressed to your clipboard. In the syntax this code likes.
-GG() - Will Concede and interact with the nessisary things to requeue.
-OpenMenu() - Clicks on the button for the in-game settings.
-PassTurn() - Ends your turn and returns the mouse back where it was .
-HandCont() - Moves mouse to the Continue button or in the center where your hand resides.
+GAP(RatioX, RatioY) - For more dynamically found pixels, uses the selected's window maxW/H. GetAbsolutePixels
+RNGsleep(MinMS, MaxMS) - Whats not more fun than a little sleepytime RNG?
+doAction(xRatio, yRatio, Click, ReturnToOrigialPosition) - Where (,,true,true) Moves to 0.x,0.y, clicks, then returns cursor to OG position.
 ```
 ### Customizing the script
 * To adjust the quantity of hotkeys change `#actions = 6` Found at the very top.
@@ -29,7 +28,7 @@ ____
 #### If theres any problems with the alignment of the binds
 add `GrabScreenRegion()` in one of the 'Action' areas of the very bottom of the Script.
 
-Once the bind for this function is used, it will save in the proper syntax for this code in your clipboard the data from where your cursor was relative to the Skyweaver Window. `:= GAP(x.xx, y.yy)`
+Once the bind for this function is used, it will save in the proper syntax for this code in your clipboard the data from where your cursor was relative to the Skyweaver Window. `doAction(0.xx,0.yy)`
 
 
 ### Known issues :
