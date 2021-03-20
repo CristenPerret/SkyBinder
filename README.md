@@ -36,6 +36,7 @@ Can bind Mousebutton4 (XButton1), Mousewheel press (MButton), and other special 
 
 Just not through the GUI. Only by Editing the `.ini` file.
 
+HotKey text doesnt display right information. `ini` file > gui display.
 
 
 # Next to be added
