@@ -252,7 +252,7 @@ return
 ;These Actions may contain any commands for their respective hotkeys to perform.
 
 ; Only allows this window to be trigger the actions below.
-#If WinActive("SkyWeaver")
+#If WinActive("Skyweaver")
 	
 Action1:
 	doAction(0.98, 0.98,true, true) ; END TURN
