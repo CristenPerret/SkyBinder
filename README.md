@@ -40,6 +40,7 @@ HotKey text doesnt display right information. `ini` file > gui display.
 
 
 # Next to be added
+- [x] Be an idiot and not use the 'Releases' feature
 - [x] Auto-forefit & requeue
 - [ ] Emotes 	:lying_face:
 - [ ] Smorc
