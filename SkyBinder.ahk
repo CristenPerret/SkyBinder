@@ -252,7 +252,7 @@ return
 ;These Actions may contain any commands for their respective hotkeys to perform.
 
 ; Only allows this window to be trigger the actions below.
-#IfWinActive, ahk_exe SkyWeaver.exe
+#If WinActive("SkyWeaver")
 	
 Action1:
 	doAction(0.98, 0.98,true, true) ; END TURN
