@@ -7,21 +7,21 @@ SetDefaultMouseSpeed, 0 ; Move mouse instantly
 
 #actions = 15  ;Adjust this value to increase the amount of bindable hotkeys
 ;Change this array to display text next to the associated Hotkey.
-ActionTitle :=["1.End Turn"
-,"2. P-DECK"
-,"3. P-GRAVE"
-,"4. P-BOARD"
-,"5. P-HAND"
-,"6. ENE-GRAVE"
-,"7. ENE-BOARD"
-,"8. ENE-HAND"
-,"9. HISTORY"
-,"10. MUTE"
-,"11. OPTIONS"
-,"12. GG"
-,"13. ShowGUI(F8)"
-,"14. Reload Script"
-,"15. Cursor pos (DEV)"]
+ActionTitle :=["1.End Turn :"
+,"2. P DECK :"
+,"3. P GRAVE :"
+,"4. P BOARD :"
+,"5. P HAND :"
+,"6. ENE GRAVE :"
+,"7. ENE BOARD :"
+,"8. ENE HAND :"
+,"9. HISTORY :"
+,"10. MUTE :"
+,"11. OPTiONS :"
+,"12. CONCEDE :"
+,"13. GUi(F8) :"
+,"14. RELOADUi :"
+,"15. GAP(DEV) :"]
 
 ; Associating the functions to the labels are listed at the bottom of the script as 'Action#:'
 
@@ -48,18 +48,23 @@ Gui, Add, Radio, x-15 y-15 ;Important to not automatically bind keys on opening 
 Gui Add, Picture, gButtonInfo xm yp ym w186 h92, Assets\Titlebar.png
 Gui -0x10000 -0x30000
 Loop,% #actions {
-Gui Font, Bold Underline c0xCCCAD3, Georgia
-Gui, Add, Text,xm +right,  % ActionTitle[A_Index] 
 Gui Font
+HKeyxPos := guiWidth / 2
+HKeyWidth := guiWidth - HKeyxPos - 5
+Gui, Font, Bold, Georgia
+Gui, Add, Hotkey, xs x%HKeyxPos% h18 w%HKeyWidth% vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
+Gui Font, Bold Underline c0xCCCAD3, Georgia
+Gui, Add, Text,xp xs x5,  % ActionTitle[A_Index] 
+
  IniRead, savedHK%A_Index%, Hotkeys.ini, Hotkeys, %A_Index%, %A_Space%
  If savedHK%A_Index%                                       ;Check for saved hotkeys in INI file.
   Hotkey,% savedHK%A_Index%, Action%A_Index%                 ;Activate saved hotkeys if found.
  StringReplace, noMods, savedHK%A_Index%, ~                  ;Remove tilde (~) and Win (#) modifiers...
  StringReplace, noMods, noMods, #,,UseErrorLevel              ;They are incompatible with hotkey controls (cannot be shown).
- Gui, Add, Hotkey, x+5 vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
+
 }                  
 Gui +hWndhMainWnd
-Gui Add, Picture, gminimize xm wp w181 h28 ,Assets\Hide.png
+Gui Add, Picture, xm x13 wp w181 h28 gminimize,Assets\Hide.png
 return
 GuiClose:
  ExitApp
