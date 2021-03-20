@@ -7,21 +7,21 @@ SetDefaultMouseSpeed, 0 ; Move mouse instantly
 
 #actions = 15  ;Adjust this value to increase the amount of bindable hotkeys
 ;Change this array to display text next to the associated Hotkey.
-ActionTitle :=["1.End Turn :"
-,"2. P DECK :"
-,"3. P GRAVE :"
-,"4. P BOARD :"
-,"5. P HAND :"
-,"6. ENE GRAVE :"
-,"7. ENE BOARD :"
-,"8. ENE HAND :"
-,"9. HISTORY :"
-,"10. MUTE :"
-,"11. OPTiONS :"
-,"12. CONCEDE :"
-,"13. GUi(F8) :"
-,"14. RELOADUi :"
-,"15. GAP(DEV) :"]
+ActionTitle :=["End Turn [1]"
+,"P DECK [2]"
+,"P GRAVE [3]"
+,"P BOARD [4]"
+,"P HAND [5]"
+,"ENE GRAVE [6]"
+,"ENE BOARD [7]"
+,"ENE HAND [8]"
+,"HiSTORY [9]"
+,"MUTE [10]"
+,"OPTiONS [11]"
+,"CONCEDE [12]"
+,"GUi(F8) [13]"
+,"RELOADUi [14]"
+,"(DEV) GAP [15]"]
 
 ; Associating the functions to the labels are listed at the bottom of the script as 'Action#:'
 
@@ -45,16 +45,19 @@ guiWidth := 206
 Gui +hWndhMainWnd
 Gui Color, 0x2F204C
 Gui, Add, Radio, x-15 y-15 ;Important to not automatically bind keys on opening gui
-Gui Add, Picture, gButtonInfo xm yp ym w186 h92, Assets\Titlebar.png
+Gui Add, Picture, gButtonInfo xm+1 yp+1 ym w186 h92, Assets\Titlebar.png
 Gui -0x10000 -0x30000
-Loop,% #actions {
-Gui Font
 HKeyxPos := guiWidth / 2
 HKeyWidth := guiWidth - HKeyxPos - 5
-Gui, Font, Bold, Georgia
-Gui, Add, Hotkey, xs x%HKeyxPos% h18 w%HKeyWidth% vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
+TxtWidth := guiWidth - HKeyWidth - 5
+Loop,% #actions {
+Gui Font
 Gui Font, Bold Underline c0xCCCAD3, Georgia
-Gui, Add, Text,xp xs x5,  % ActionTitle[A_Index] 
+Gui, Add, Text, xp y+s x-3 w%TxtWidth% +right,  % ActionTitle[A_Index] 
+Gui, Font, Bold, Georgia
+Gui, Add, Hotkey, yp x%HKeyxPos% h18 w%HKeyWidth% +E0x20 vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
+
+
 
  IniRead, savedHK%A_Index%, Hotkeys.ini, Hotkeys, %A_Index%, %A_Space%
  If savedHK%A_Index%                                       ;Check for saved hotkeys in INI file.
@@ -319,3 +322,8 @@ return
 Action15:
 Grabscreenregion()
 return
+
+
+
+
+
