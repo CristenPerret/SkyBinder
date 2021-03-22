@@ -3,11 +3,16 @@
 SetBatchLines, -1
 SetDefaultMouseSpeed, 0 ; Move mouse instantly
 
+OnMessage(0x201, "WM_LBUTTONDOWN") ;left click drag trigger
+; OnMessage(0x204, "WM_RBUTTONDOWN") ; right click infobox trigger
 
 
-#actions = 15  ;Adjust this value to increase the amount of bindable hotkeys
-;Change this array to display text next to the associated Hotkey.
-ActionTitle :=["End Turn [1]"
+
+
+
+
+; Populates a HotKey for every one listed in ActionName
+ActionName :=["END TURN [1]"
 ,"P DECK [2]"
 ,"P GRAVE [3]"
 ,"P BOARD [4]"
@@ -23,17 +28,25 @@ ActionTitle :=["End Turn [1]"
 ,"RELOADUi [14]"
 ,"(DEV) GAP [15]"]
 
-; Associating the functions to the labels are listed at the bottom of the script as 'Action#:'
 
+
+#actions = % ActionName.MaxIndex() ; Gets the count from the array to make the hotkey fields.
+
+; Associating the functions to the labels are listed at the very bottom of the script 
+; as 'Action#:'
+
+version := "v1.3" ; 03/22/21
+PlayerDeck := "d" ; actual in-game binds??
+PlayerGrave := "g" ; actual in-game binds??
 
 ;--------------------------------------------------------------------------------------------------
 ; THIS SECTION ISNT USER-FRIENDLY. BEWARNED IF YOU'RE NOT VERSED IN AHK'S SYNTAX.
 ;--------------------------------------------------------------------------------------------------
 
 ; Tray options ----
-TrayTip, SkyBinder,,16
+TrayTip, SkyBinder %version%,,16
 Menu, Tray, Icon, Assets\Skybinder.ico, 1,1
-Menu, tray, Tip, SkyBinder
+Menu, tray, Tip, SkyBinder %version%
 Menu, Tray, Click, 1
 Menu, Tray, NoStandard
 Menu, Tray, Add, Keybinds, Action13
@@ -41,25 +54,27 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add, Exit, GuiClose
 Menu, Tray, Default, Keybinds
 ; GUI -----
-guiWidth := 206
+global guiWidth := 206
 Gui +hWndhMainWnd
+Gui, +AlwaysOnTop
+Gui -0x10000 -0x30000 -0xC00000
 Gui Color, 0x2F204C
 Gui, Add, Radio, x-15 y-15 ;Important to not automatically bind keys on opening gui
-Gui Add, Picture, gButtonInfo xm+1 yp+1 ym w186 h92, Assets\Titlebar.png
-Gui -0x10000 -0x30000
+Gui Add, Picture, x4 y1 w160 h33, Assets\Titlebar.png
+Gui Add, Picture, x+2 y-0 w36 h33 gGuiClose, Assets\Exit.png
 HKeyxPos := guiWidth / 2
 HKeyWidth := guiWidth - HKeyxPos - 5
 TxtWidth := guiWidth - HKeyWidth - 5
 Loop,% #actions {
 Gui Font
 Gui Font, Bold Underline c0xCCCAD3, Georgia
-Gui, Add, Text, xp y+s x-3 w%TxtWidth% +right,  % ActionTitle[A_Index] 
+Gui, Add, Text, xp y+s x-3 w%TxtWidth% +right,  % ActionName[A_Index] 
 Gui, Font, Bold, Georgia
-Gui, Add, Hotkey, yp x%HKeyxPos% h18 w%HKeyWidth% +E0x20 vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
+Gui, Add, Hotkey, yp x%HKeyxPos% h18 w%HKeyWidth% vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
 
 
 
- IniRead, savedHK%A_Index%, Hotkeys.ini, Hotkeys, %A_Index%, %A_Space%
+ IniRead, savedHK%A_Index%, Hotkeys.ini, Actions, %A_Index%, %A_Space%
  If savedHK%A_Index%                                       ;Check for saved hotkeys in INI file.
   Hotkey,% savedHK%A_Index%, Action%A_Index%                 ;Activate saved hotkeys if found.
  StringReplace, noMods, savedHK%A_Index%, ~                  ;Remove tilde (~) and Win (#) modifiers...
@@ -67,12 +82,13 @@ Gui, Add, Hotkey, yp x%HKeyxPos% h18 w%HKeyWidth% +E0x20 vHK%A_Index% gGuiAction
 
 }                  
 Gui +hWndhMainWnd
-Gui Add, Picture, xm x13 wp w181 h28 gminimize,Assets\Hide.png
+Gui Add, Picture, xm x9 wp w188 h30 gminimize,Assets\Hide.png
 return
 GuiClose:
  ExitApp
 Reload:
  reload
+
 GuiAction:
  If %A_GuiControl% in +,^,!,+^,+!,^!,+^!    ;If the hotkey contains only modifiers, return to wait for a key.
   return
@@ -116,9 +132,9 @@ setHK(num,INI,GUI) {
   Hotkey, %INI%, Action%num%, Off  ;  disable it.
  If GUI                           ;If new hotkey exists,
   Hotkey, %GUI%, Action%num%, On   ;  enable it.
- IniWrite,% GUI ? GUI:null, Hotkeys.ini, Hotkeys, %num%
+ IniWrite,% GUI ? GUI:null, Hotkeys.ini, Actions, %num%
  savedHK%num%  := HK%num%
- TrayTip, Action%num%,% !INI ? GUI " ON":!GUI ? INI " OFF":GUI " ON`n" INI " OFF" ; Display changing binds in notification, 
+ ;TrayTip, Action%num%,% !INI ? GUI " ON":!GUI ? INI " OFF":GUI " ON`n" INI " OFF" ; Display changing binds in notification, 
 }
 #MenuMaskKey vk07                 ;Requires AHK_L 38+
 #If ctrl := HotkeyCtrlHasFocus()
@@ -154,43 +170,28 @@ HotkeyCtrlHasFocus() {
  }
 }
 minimize:
+WinGetPos, gui_x, gui_y,,, ahk_id %MainWnd%
+IniWrite, x%gui_x% y%gui_y%, Hotkeys.ini, GuiPos, xy
 	Gui, Hide ;minimizes to tray
 return
-ButtonInfo:
-Gui, 2:New, -0x10000 -0x30000
-Gui, 2:+hWndhMainWnd
-Gui, 2:Color, 0x2F204C
-Gui, 2:Font, Bold c0xCCCAD3, Georgia
-Gui, 2:Add, Text, x+20 xm ym Center ,If what you seek is Skyweaver HotKeys.`nThis is the answer.`n`nSkyBinder can easily be modified by you. `nBind the 'Cursor pos' action. `nThen paste into the *AHK File where needed.
-Gui, 2:Add, Text,w330 h2 +0x10
-Gui, 2:Add, Text, x0 xm Center +0x10,Made with UI Scale was 0.69 Fullscreen 1920x1080.
-Gui, 2:Show, , More Info
-return
+
 ; FUNCTIONS ------------------------------------------------------
+fullscreen() {
+	WinGetPos,,, w, h,
+	return (w = A_ScreenWidth && h = A_ScreenHeight)
+}
+
+ShowGUI() {
+	Gui, Show, %gui_position% w%guiWidth% ,SkyBinder
+	}
+
 GAP(RatioX, RatioY) { ; [G]et [A]bsolute [P]ixels
 	WinGetPos,,, Width, Height
 	AbsoluteX := Round(Width * RatioX)
 	AbsoluteY := Round(Height * RatioY)
 	return [AbsoluteX, AbsoluteY]
 }
-RNGsleep(Between1, Between2) {
-	Random, RandomizedSleepTime, Between1, Between2
-	Sleep, RandomizedSleepTime
-}
-doAction(AX, AY, cliQue=false,return2ogpos=false ) {
-	BlockInput, on
-	MoveAction := GAP(AX, AY)
-	MouseGetPos, gx, gy
-	MouseMove, MoveAction[1], MoveAction[2]
-	if (cliQue) {
-	click,
-	}
-	if (return2ogpos) {
-	MouseMove, gx, gy
-	}	
-	BlockInput, off
-	return
-}
+
 Grabscreenregion() {
 BlockInput On
 MouseGetPos, gx, gy
@@ -207,6 +208,47 @@ ToolTip
 return
 }
 
+RNGsleep(Between1, Between2, cliQue=false) {
+	Random, RandomizedSleepTime, Between1, Between2
+	Sleep, RandomizedSleepTime
+		if (cliQue) {
+	click,
+	}
+}
+
+doAction(AX, AY, cliQue=false,return2ogpos=false ) {
+	BlockInput, on
+	MoveAction := GAP(AX, AY)
+	MouseGetPos, gx, gy
+	MouseMove, MoveAction[1], MoveAction[2]
+	if (cliQue) {
+	click,
+	}
+	if (return2ogpos) {
+	MouseMove, gx, gy
+	}	
+	BlockInput, off
+	return
+}
+
+WM_LBUTTONDOWN() {
+	PostMessage, 0xA1, 2
+	return
+}
+/*
+WM_RBUTTONDOWN() {  ;infobox/settings window wip so disabled for now
+ButtonInfo:
+Gui, 2:New, -0x10000 -0x30000
+Gui, 2:+hWndhInfoWnd
+Gui, 2:Color, 0x2F204C
+Gui, 2:Font, Bold c0xCCCAD3, Georgia
+
+Gui, 2:Add, Text,w330 h2 +0x10
+Gui, 2:Add, Text, x0 xm Center +0x10,Made with UI Scale was 0.69 Fullscreen 1920x1080.
+Gui, 2:Show, , More Info
+}
+*/
+
 ; End of Functions ------------------------------------------------
 
 
@@ -219,49 +261,30 @@ return
 ; Custom Functions available ATM : 
 ; Grabscreenregion() - When bound to a hotkey it will save your cursor position when pressed to your clipboard. In the syntax this code likes.
 ; GAP(RatioX, RatioY) - For more dynamically found pixels, uses the selected's window maxW/H. GetAbsolutePixels
-; RNGsleep(MinMS, MaxMS) - Whats not more fun than a little sleepytime RNG?
+; RNGsleep(MinMS, MaxMS, Click) - Whats not more fun than a little sleepytime RNG? (,,true)
 ; doAction(xRatio, yRatio, Click, ReturnToOrigialPosition) - Where (,,true,true) Moves to 0.x,0.y, clicks, then returns cursor to OG position.
-
+; ShowGUI() 
+; Fullscreen() - Checks if the window is fullscreen resolution.
 ; My Resolution UI for this was scaled at 0.69, and primarily at 1920x1080 Fullscreen.
-
-; FullScreen
-;	doAction(0.97, 0.98) ; END TURN
-;	doAction(0.89, 0.47) ; PLAYER DECK
-;	doAction(0.11, 0.49) ; PLAYER GRAVE
-;	doAction(0.50, 0.59) ; PLAYER BOARD
-;	doAction(0.50, 0.97) ; PLAYER HAND
-;	doAction(0.11, 0.40) ; ENEMY GRAVE
-;	doAction(0.50, 0.30) ; ENEMY BOARD
-;	doAction(0.50,0.02) ; ENEMY HAND
-;	doAction(0.93, 0.02) ; HISTORY
-;	doAction(0.96, 0.02) ; MUTE
-;	doAction(0.99, 0.02) ; OPTIONS
-;	doAction(0.5, 0.44) ; Concede
-;	doAction(0.47, 0.53) ; Confirm Concede
-;	doAction(0.8, 0.41) ;Requeue / Play
+;---
+; %PlayerDeck% - actual in-game binds??
+; %PlayerGrave% - actual in-game binds??
 
 
-; Windowed Mode (Dang Topbar)
-;	doAction(0.11, 0.44) ; Enemy Grave (Window)
-;	doAction(0.50, 0.33) ; Enemy Board (Window)
-;	doAction(0.11, 0.49) ; PLAYER GRAVE
-;	doAction(0.80, 0.15) ; HISTORY
-;	doAction(0.87, 0.15) ; MUTE
-;	doAction(0.95, 0.15) ; OPTIONS
+; Only allow script to trigger while a window with "Skyweaver" is active/selected
+; --- Should work for any browser/client.(tm) ---
+#If WinActive("Skyweaver") and fullscreen()
 
-;These Actions may contain any commands for their respective hotkeys to perform.
 
-; Only allows this window to be trigger the actions below.
-#If WinActive("Skyweaver")
 	
 Action1:
-	doAction(0.98, 0.98,true, true) ; END TURN
+		doAction(0.97, 0.98,true,true) ; END TURN
 return
 Action2:
-	doAction(0.89, 0.47) ; PLAYER DECK
+	Send, %PlayerDeck%
 return
 Action3:
-	doAction(0.12, 0.53) ; PLAYER GRAVE
+	Send, %PlayerGrave%
 return
 Action4:
 	doAction(0.50, 0.59) ; PLAYER BOARD
@@ -295,26 +318,19 @@ Action12: ;Concedes and presses the stuff to requeue again.
 	doAction(0.47, 0.53, true) ; Confirm Concede
 	RNGsleep(300,420) ;Allow UI to load
 	doAction(0.50, 0.97,true) ; Continue Button
-	RNGsleep(240,420)
-	Click,
-	RNGsleep(420,840)
-	click,
-	RNGsleep(1000,1420)
-	click,
-	RNGsleep(1000,1420)
-	click,
-	RNGsleep(1000,1420)
-	click,
-	RNGsleep(1000,1420)
-	click,
-	RNGsleep(1000,1420)
-	click,
-	RNGsleep(4000,4420)
+	RNGsleep(240,420, true)
+	RNGsleep(420,840, true)
+	RNGsleep(1000,1420, true)
+	RNGsleep(1000,1420, true)
+	RNGsleep(1000,1420, true) ; a bunch of delayed clicks
+	RNGsleep(1000,1420, true) ; to get thro the rewards section
+	RNGsleep(1000,1420, true)
+	RNGsleep(4000,4420, true)
 	doAction(0.8, 0.41,true) ;Requeue
 return
 Action13:
 F8::
-Gui, Show, w%guiWidth% ,SkyBinder
+ShowGUI()
 return
 Action14:
 reload
@@ -322,8 +338,3 @@ return
 Action15:
 Grabscreenregion()
 return
-
-
-
-
-
