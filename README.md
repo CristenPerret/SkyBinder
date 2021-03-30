@@ -27,7 +27,7 @@ doAction(xRatio, yRatio, Click, ReturnToOrigialPosition) - Where (,,true,true) M
 ____
 #### If theres any problems with the alignment of the binds
 GrabScreenregion, or '(DEV) GAP'. Once the bind for this function is used, it will save and simplify the proccess by adding a string to your clipboard of the data from where your cursor was relative to the Skyweaver Window. `doAction(0.xx,0.yy)`
-
+edit at the bottom of the ahk in 'action#' your new values. Reload- profit.
 
 ### Known issues :
 Can bind Mousebutton4 (XButton1), Mousewheel press (MButton), and other special keys. 
