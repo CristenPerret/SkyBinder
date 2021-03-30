@@ -27,17 +27,14 @@ doAction(xRatio, yRatio, Click, ReturnToOrigialPosition) - Where (,,true,true) M
 ____
 #### If theres any problems with the alignment of the binds
 GrabScreenregion, or '(DEV) GAP'. Once the bind for this function is used, it will save and simplify the proccess by adding a string to your clipboard of the data from where your cursor was relative to the Skyweaver Window. `doAction(0.xx,0.yy)`
-
-edit at the bottom of the ahk in 'action#' your new values. Reload- profit.
+###### edit at the bottom of the ahk in 'action#' your new values. Reload- profit.
 
 ### Known issues :
-Can bind Mousebutton4 (XButton1), Mousewheel press (MButton), and other special keys. 
+* Can bind Mousebutton4 (XButton1), Mousewheel press (MButton), and other special keys. Just not through the GUI. Only by Editing the `.ini` file. see [AHK SEND](https://www.autohotkey.com/docs/commands/Send.htm)
 
-Just not through the GUI. Only by Editing the `.ini` file.
+* HotKey text doesnt display right information. `ini`. I think to style them it caused the hotkey display to shift by one, so 'wip'... They work fine, its just jank, the ini file #s coorelate it just is the display.
 
-HotKey text doesnt display right information. `ini`. 
-I think to style them it caused the hotkey display to shift by one, so 'wip'... They work fine, its just jank, the ini file #s coorelate it just is the display.
-
+* Me and my style choices lol
 
 # Next to be added
 - [x] Be an idiot and not use the 'Releases' feature
