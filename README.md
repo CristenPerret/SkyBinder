@@ -3,7 +3,8 @@ Currently its just an `AHK` that can openendly be given bind keys to perform act
 
 __Requires:__  [AutoHotKey](https://www.autohotkey.com/download/)
 
-It will only activate onto anything with "Skyweaver" in itsname, and it has to be fullscreen in-game ui 0.69. Nice.
+It will only activate onto anything with "Skyweaver" in itsname, and it has to be fullscreen 
+##### in-game ui 0.69. Nice.
 
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
