@@ -70,11 +70,8 @@ Gui Font
 Gui Font, Bold Underline c0xCCCAD3, Georgia
 Gui, Add, Text, xp y+s x-3 w%TxtWidth% +right,  % ActionName[A_Index] 
 Gui, Font, Bold, Georgia
+IniRead, savedHK%A_Index%, Hotkeys.ini, Actions, %A_Index%, %A_Space%
 Gui, Add, Hotkey, yp x%HKeyxPos% h18 w%HKeyWidth% vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
-
-
-
- IniRead, savedHK%A_Index%, Hotkeys.ini, Actions, %A_Index%, %A_Space%
  If savedHK%A_Index%                                       ;Check for saved hotkeys in INI file.
   Hotkey,% savedHK%A_Index%, Action%A_Index%                 ;Activate saved hotkeys if found.
  StringReplace, noMods, savedHK%A_Index%, ~                  ;Remove tilde (~) and Win (#) modifiers...
