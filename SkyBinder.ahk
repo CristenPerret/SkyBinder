@@ -1,17 +1,18 @@
-#SingleInstance force
 #NoEnv
+#SingleInstance force
 SetBatchLines, -1
 SetDefaultMouseSpeed, 0 ; Move mouse instantly
+SetTitleMatchMode, 2
 
-OnMessage(0x201, "WM_LBUTTONDOWN") ;left click drag trigger
-; OnMessage(0x204, "WM_RBUTTONDOWN") ; right click infobox trigger
-
-
-
+; To edit/customize the script, check out the bottom of the script, at '4. ACTIONS'.
+; Thank you and happy gaming!
 
 
 
-; Populates a HotKey for every one listed in ActionName
+OnMessage(0x201, "WM_LBUTTONDOWN") ;left click drag trigger for the GUI
+OnMessage(0x204, "WM_RBUTTONDOWN") ; right click infobox trigger for the GUI
+
+; Populates a Hotkey for every one listed in ActionName
 ActionName :=["END TURN [1]"
 ,"P DECK [2]"
 ,"P GRAVE [3]"
@@ -29,21 +30,20 @@ ActionName :=["END TURN [1]"
 ,"(DEV) GAP [15]"]
 
 
-
 #actions = % ActionName.MaxIndex() ; Gets the count from the array to make the hotkey fields.
 
-; Associating the functions to the labels are listed at the very bottom of the script 
-; as 'Action#:'
 
-version := "v1.3" ; 03/22/21
-PlayerDeck := "d" ; actual in-game binds??
-PlayerGrave := "g" ; actual in-game binds??
+version := "v1.4" ; 07/11/22
+PlayerDeck := "d" 
+PlayerGrave := "g"
+EndTurn := "Space"
 
 ;--------------------------------------------------------------------------------------------------
-; THIS SECTION ISNT USER-FRIENDLY. BEWARNED IF YOU'RE NOT VERSED IN AHK'S SYNTAX.
+; THIS SECTION ISNT USER-FRIENDLY. BEWARNED IF YOU'RE NOT VERSED IN AHK'S SYNTAX. 
+;--------------! THE FAR BOTTOM IS WHERE YOU MIGHT WANT TO LOOK INSTEAD !--------------------------
 ;--------------------------------------------------------------------------------------------------
 
-; Tray options ----
+;1. Tray options ----
 TrayTip, SkyBinder %version%,,16
 Menu, Tray, Icon, Assets\Skybinder.ico, 1,1
 Menu, tray, Tip, SkyBinder %version%
@@ -53,7 +53,7 @@ Menu, Tray, Add, Keybinds, Action13
 Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add, Exit, GuiClose
 Menu, Tray, Default, Keybinds
-; GUI -----
+;2. GUI -----
 global guiWidth := 206
 Gui +hWndhMainWnd
 Gui, +AlwaysOnTop
@@ -70,7 +70,7 @@ Gui Font
 Gui Font, Bold Underline c0xCCCAD3, Georgia
 Gui, Add, Text, xp y+s x-3 w%TxtWidth% +right,  % ActionName[A_Index] 
 Gui, Font, Bold, Georgia
-IniRead, savedHK%A_Index%, Hotkeys.ini, Actions, %A_Index%, %A_Space%
+IniRead, savedHK%A_Index%, Hotkeys.ini, Actions, Action #%A_Index% , %A_Space%
 Gui, Add, Hotkey, yp x%HKeyxPos% h18 w%HKeyWidth% vHK%A_Index% gGuiAction, %noMods%        ;Add hotkey controls and show saved hotkeys.
  If savedHK%A_Index%                                       ;Check for saved hotkeys in INI file.
   Hotkey,% savedHK%A_Index%, Action%A_Index%                 ;Activate saved hotkeys if found.
@@ -129,7 +129,7 @@ setHK(num,INI,GUI) {
   Hotkey, %INI%, Action%num%, Off  ;  disable it.
  If GUI                           ;If new hotkey exists,
   Hotkey, %GUI%, Action%num%, On   ;  enable it.
- IniWrite,% GUI ? GUI:null, Hotkeys.ini, Actions, %num%
+ IniWrite,% GUI ? GUI:null, Hotkeys.ini, Actions, Action #%num% ;Writes the hotkey to Hotkey.ini
  savedHK%num%  := HK%num%
  ;TrayTip, Action%num%,% !INI ? GUI " ON":!GUI ? INI " OFF":GUI " ON`n" INI " OFF" ; Display changing binds in notification, 
 }
@@ -172,7 +172,7 @@ IniWrite, x%gui_x% y%gui_y%, Hotkeys.ini, GuiPos, xy
 	Gui, Hide ;minimizes to tray
 return
 
-; FUNCTIONS ------------------------------------------------------
+; 3. FUNCTIONS ------------------------------------------------------
 fullscreen() {
 	WinGetPos,,, w, h,
 	return (w = A_ScreenWidth && h = A_ScreenHeight)
@@ -232,24 +232,30 @@ WM_LBUTTONDOWN() {
 	PostMessage, 0xA1, 2
 	return
 }
-/*
-WM_RBUTTONDOWN() {  ;infobox/settings window wip so disabled for now
+
+WM_RBUTTONDOWN() {  ;infobox/settings window 
 ButtonInfo:
 Gui, 2:New, -0x10000 -0x30000
 Gui, 2:+hWndhInfoWnd
 Gui, 2:Color, 0x2F204C
 Gui, 2:Font, Bold c0xCCCAD3, Georgia
 
-Gui, 2:Add, Text,w330 h2 +0x10
-Gui, 2:Add, Text, x0 xm Center +0x10,Made with UI Scale was 0.69 Fullscreen 1920x1080.
+;Gui, 2:Add, Text,w820 h2 +0x10
+Gui, 2:Add, Text, x0 xm Center +0x10,Made with UI Scale at 100`% (Default), and Fullscreen 1920x1080.`n`nMake sure to enable "Spacebar Ends Turn" in-game under Options-Game.`nElse you can remove the '`;' comment in the Action1 section to manually click it.`n`nCurrently set to only be enabled when Fullscreen, on any browser or the Standalone Client.`nSometimes when typing like in the filter to build a deck, you might want to get out of fullscreen else some hotkeys could fire.`n`nIf for some reason certain actions arent clicking in the right region:`n1.Mouseover in-game the thing you wish to get the screenregion of.`n2.Press the Grabscreenregion hotkey.`n3.update the Action with the current coordinates (now stored in your clipboard).`n`n
+Gui, Font, underline
+Gui, 2:Add, Text, x0 xm Center +0x10 cYellow gMyLink, GLHF!                                            Feel free to support me. Heres a Redirect to my BuyMeACoffee page.                                         Thankyou!
+Gui, 2:+AlwaysOnTop
 Gui, 2:Show, , More Info
 }
-*/
+
+MyLink:
+Run, https://www.buymeacoffee.com/?via=Kaliados
+return
 
 ; End of Functions ------------------------------------------------
 
 
-
+; 4. ACTIONS 
 
 
 ; Welcome friends! ^^
@@ -262,26 +268,25 @@ Gui, 2:Show, , More Info
 ; doAction(xRatio, yRatio, Click, ReturnToOrigialPosition) - Where (,,true,true) Moves to 0.x,0.y, clicks, then returns cursor to OG position.
 ; ShowGUI() 
 ; Fullscreen() - Checks if the window is fullscreen resolution.
-; My Resolution UI for this was scaled at 0.69, and primarily at 1920x1080 Fullscreen.
+; My Resolution UI for this was scaled at the default - 100%, and primarily at 1920x1080 Fullscreen.
 ;---
-; %PlayerDeck% - actual in-game binds??
-; %PlayerGrave% - actual in-game binds??
+; In-Game Hotkeys that actually work can be refrenced like so : %PlayerDeck%, %PlayerGrave%, or %EndTurn%. 
 
-
-; Only allow script to trigger while a window with "Skyweaver" is active/selected
-; --- Should work for any browser/client.(tm) ---
+; Only allow script to trigger while a window with "Skyweaver" is active/selected, AND Fullscreen.
+; --- SHOULD work for any browser/client.(tm) ---
 #If WinActive("Skyweaver") and fullscreen()
 
 
 	
 Action1:
-		doAction(0.97, 0.98,true,true) ; END TURN
+	;doAction(0.98, 0.98,true,true) ;Manually click endturn - if you dont want to enable the Spacebar option.
+	Send, {%EndTurn%}
 return
 Action2:
-	Send, %PlayerDeck%
+	Send, {%PlayerDeck%}
 return
 Action3:
-	Send, %PlayerGrave%
+	Send, {%PlayerGrave%}
 return
 Action4:
 	doAction(0.50, 0.59) ; PLAYER BOARD
@@ -290,7 +295,7 @@ Action5:
 	doAction(0.50, 0.97) ; PLAYER HAND
 return
 Action6:
-	doAction(0.16, 0.39, true) ; ENEMY GRAVE
+	doAction(0.20, 0.37, true) ; ENEMY GRAVE
 return
 Action7:
 	doAction(0.50, 0.30) ; ENEMY BOARD
@@ -299,34 +304,41 @@ Action8:
 	doAction(0.50,0.02) ; ENEMY HAND
 return
 Action9:
-	doAction(0.93, 0.02,true,true) ; HISTORY
+	doAction(0.91, 0.03,true,true) ; HISTORY
 return
 Action10:
-	doAction(0.96,0.02,true,true) ;MUTE
+	doAction(0.95, 0.03,true,true) ;MUTE
 return
 Action11:
-	doAction(0.99, 0.02,true) ; OPTIONS
-	doAction(0.5, 0.48)
+	doAction(0.98, 0.03,true) ; OPTIONS
+	doAction(0.5, 0.5)
 return
 Action12: ;Concedes and presses the stuff to requeue again.
-	doAction(0.99, 0.02, true) ; OPTIONS
+	tooltip, "attempting to requeue"
+	doAction(0.98, 0.04,true) ; OPTIONS
 	RNGsleep(300,420) ;Allow UI to load
-	doAction(0.5, 0.44, true) ; Concede
-	doAction(0.47, 0.53, true) ; Confirm Concede
-	RNGsleep(300,420) ;Allow UI to load
-	doAction(0.50, 0.97,true) ; Continue Button
+	doAction(0.50, 0.44,true) ; Concede
+	RNGsleep(50,100)
+	doAction(0.44, 0.54,true) ; Confirm Concede
+	doAction(0.78, 0.59) ;Requeue Button location
+	RNGsleep(1300,1420) ;Allow UI to load
+	Send, {%EndTurn%}
+	RNGsleep(4000,5420,true)
+	Send, {%EndTurn%}
 	RNGsleep(240,420, true)
-	RNGsleep(420,840, true)
-	RNGsleep(1000,1420, true)
-	RNGsleep(1000,1420, true)
-	RNGsleep(1000,1420, true) ; a bunch of delayed clicks
-	RNGsleep(1000,1420, true) ; to get thro the rewards section
-	RNGsleep(1000,1420, true)
-	RNGsleep(4000,4420, true)
-	doAction(0.8, 0.41,true) ;Requeue
+	Send, {%EndTurn%}
+	RNGsleep(1000,1420,true) ; a bunch of delayed clicks
+	Send, {%EndTurn%}
+	RNGsleep(1000,1420,true) ; to get thro the rewards section
+	Send, {%EndTurn%}
+	RNGsleep(1000,1420,true)
+	Send, {%EndTurn%}
+	RNGsleep(4000,4420,true)
+	RNGsleep(4000,4420,true)
+	RNGsleep(4000,4420,true)
+	tooltip,
 return
 Action13:
-F8::
 ShowGUI()
 return
 Action14:
