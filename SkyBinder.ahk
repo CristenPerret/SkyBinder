@@ -295,7 +295,7 @@ Action5:
 	doAction(0.50, 0.97) ; PLAYER HAND
 return
 Action6:
-	doAction(0.20, 0.37, true) ; ENEMY GRAVE
+	doAction(0.17, 0.38, true) ; ENEMY GRAVE
 return
 Action7:
 	doAction(0.50, 0.30) ; ENEMY BOARD
