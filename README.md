@@ -3,9 +3,11 @@ Currently its just an `AHK` that can openendly be given bind keys to perform act
 
 __Requires:__  [AutoHotKey](https://www.autohotkey.com/download/)
 
-It will only activate onto anything with "Skyweaver" in itsname, and it has to be fullscreen 
-##### in-game ui 0.69. Nice.
+Hotkeys should only activate onto the standalone Skyweaver App, or any browser with "Skyweaver" in itsname. 
 
+**THE WINDOW HAS TO BE FULLSCREEN!**
+##### In-Game UI Scale 100% (Default) In-Game under Options > UI.
+##### Enable "Spacebar Ends Turn" In-Game under Options > Game.
 Hotkeys are saved & stored in an `.ini` file where this `.ahk` file resides.
 
 Once running you can either press **"F8"**, or select the 'Keybinds' option in your Tray to setup your binds.
@@ -22,7 +24,7 @@ RNGsleep(MinMS, MaxMS, Click) - Whats not more fun than a little sleepytime RNG?
 doAction(xRatio, yRatio, Click, ReturnToOrigialPosition) - Where (,,true,true) Moves to 0.x,0.y, clicks, then returns cursor to OG position.
 ```
 ### Customizing the script
-* The Quantity of hotkeys are tied to the ActioName Array, so add/remove from that to add/remove hotkeys too.
+* The Quantity of hotkeys are tied to the ActionName Array, so add/remove from that to add/remove hotkeys too.
 * Easily title next to the hotkeys as ActionName and its Hotkeyed Actions are tied 1:1.
 * Assigning actions to the hotkeys are found at the very end of the script. Starting at `Action1:`
 ____
@@ -40,5 +42,5 @@ GrabScreenregion, or '(DEV) GAP'. Once the bind for this function is used, it wi
 # Next to be added
 - [x] Be an idiot and not use the 'Releases' feature
 - [x] Auto-forefit & requeue
-- [ ] Emotes 	:lying_face:
+- [ ] Emotes 	:lying_face: (soonTM)
 - [ ] Smorc
